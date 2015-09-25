@@ -1,5 +1,6 @@
 package eu.unicate.dagger2showcase;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
 	@Inject
 	CharJ j;
 
+	@Inject
+	SharedPreferences preferences;
+
 	private TextView text;
 
 	@Override
@@ -50,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 		CharL l = new CharL(k);
 		CharM m = new CharM(this, l);
 		CharN n = new CharN(m);
-		CharO o = new CharO(PreferenceManager.getDefaultSharedPreferences(this), n);
+		CharO o = new CharO(preferences, n);
 		CharP p = new CharP(o);
 		CharQ q = new CharQ(this, p);
 		CharR r = new CharR(q);
