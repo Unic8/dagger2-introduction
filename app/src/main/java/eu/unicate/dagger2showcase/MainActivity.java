@@ -8,7 +8,6 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 import eu.unicate.dagger2showcase.di.GType;
-import eu.unicate.dagger2showcase.di.components.ActivityComponent;
 import eu.unicate.dagger2showcase.di.components.ApplicationComponent;
 import eu.unicate.dagger2showcase.di.modules.ActivityModule;
 import eu.unicate.dagger2showcase.models.CharA;
@@ -51,9 +50,7 @@ public class MainActivity extends AppCompatActivity {
 		text = (TextView) findViewById(R.id.text);
 		text2 = (TextView) findViewById(R.id.text2);
 
-		ActivityComponent.Initializer
-				.init(getApplicationComponent(), new ActivityModule(this))
-				.inject(this);
+		getApplicationComponent().subcomponent(new ActivityModule(this)).inject(this);
 
 		print(d, a, g1, g2, e, r);
 
@@ -71,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
 
 	private void laugh() {
 		StringBuilder sb = new StringBuilder("m");
-		for (int z=0; z < 20; z++) {
-			sb.append(z%2==0?i.get():h.get());
+		for (int z = 0; z < 20; z++) {
+			sb.append(z % 2 == 0 ? i.get() : h.get());
 		}
 		text2.setText(sb.toString());
 	}
