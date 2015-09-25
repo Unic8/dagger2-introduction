@@ -12,6 +12,8 @@ import eu.unicate.dagger2showcase.models.CharA;
 import eu.unicate.dagger2showcase.models.CharD;
 import eu.unicate.dagger2showcase.models.CharE;
 import eu.unicate.dagger2showcase.models.CharG;
+import eu.unicate.dagger2showcase.models.CharH;
+import eu.unicate.dagger2showcase.models.CharI;
 import eu.unicate.dagger2showcase.models.CharJ;
 
 @Singleton
@@ -26,6 +28,9 @@ public interface ApplicationComponent {
 	CharG getG2();
 	CharE getE();
 	CharJ getJ();
+
+	CharH getH();
+	CharI getI();
 
 	SharedPreferences getPreferences();
 

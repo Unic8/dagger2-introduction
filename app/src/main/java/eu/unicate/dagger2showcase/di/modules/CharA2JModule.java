@@ -69,13 +69,11 @@ public class CharA2JModule {
 	}
 
 	@Provides
-	@Singleton
 	CharH provideH(@GType("1") CharG g) {
 		return new CharH(g);
 	}
 
 	@Provides
-	@Singleton
 	CharI provideI(CharH h) {
 		return new CharI(h);
 	}
