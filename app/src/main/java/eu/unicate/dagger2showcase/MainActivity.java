@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import javax.inject.Inject;
 
+import dagger.Lazy;
 import eu.unicate.dagger2showcase.models.CharA;
 import eu.unicate.dagger2showcase.models.CharD;
 import eu.unicate.dagger2showcase.models.CharE;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 	CharJ j;
 
 	@Inject
-	SharedPreferences preferences;
+	Lazy<SharedPreferences> preferences;
 
 	private TextView text;
 
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 		CharL l = new CharL(k);
 		CharM m = new CharM(this, l);
 		CharN n = new CharN(m);
-		CharO o = new CharO(preferences, n);
+		CharO o = new CharO(preferences.get(), n);
 		CharP p = new CharP(o);
 		CharQ q = new CharQ(this, p);
 		CharR r = new CharR(q);
