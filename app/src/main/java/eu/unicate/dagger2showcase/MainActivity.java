@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import javax.inject.Inject;
 
+import eu.unicate.dagger2showcase.di.GType;
 import eu.unicate.dagger2showcase.di.components.ActivityComponent;
 import eu.unicate.dagger2showcase.di.components.ApplicationComponent;
 import eu.unicate.dagger2showcase.di.modules.ActivityModule;
@@ -22,7 +23,11 @@ public class MainActivity extends AppCompatActivity {
 	@Inject
 	CharA a;
 	@Inject
-	CharG g;
+	@GType("1")
+	CharG g1;
+	@GType("2")
+	@Inject
+	CharG g2;
 	@Inject
 	CharE e;
 	@Inject
@@ -40,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 				.init(getApplicationComponent(), new ActivityModule(this))
 				.inject(this);
 
-		print(d, a, g, g, e, r);
+		print(d, a, g1, g2, e, r);
 
 	}
 

@@ -4,6 +4,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import eu.unicate.dagger2showcase.di.GType;
 import eu.unicate.dagger2showcase.models.CharA;
 import eu.unicate.dagger2showcase.models.CharB;
 import eu.unicate.dagger2showcase.models.CharC;
@@ -55,13 +56,21 @@ public class CharA2JModule {
 
 	@Provides
 	@Singleton
-	CharG provideG(CharF f) {
-		return new CharG(f);
+	@GType("1")
+	CharG provideG1(CharF f) {
+		return new CharG(f, 1);
 	}
 
 	@Provides
 	@Singleton
-	CharH provideH(CharG g) {
+	@GType("2")
+	CharG provideG2(CharF f) {
+		return new CharG(f, 2);
+	}
+
+	@Provides
+	@Singleton
+	CharH provideH(@GType("1") CharG g) {
 		return new CharH(g);
 	}
 
