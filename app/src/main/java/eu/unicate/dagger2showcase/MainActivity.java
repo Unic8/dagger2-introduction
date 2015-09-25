@@ -1,20 +1,16 @@
 package eu.unicate.dagger2showcase;
 
-import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.TextView;
 
+import javax.inject.Inject;
+
 import eu.unicate.dagger2showcase.models.CharA;
-import eu.unicate.dagger2showcase.models.CharB;
-import eu.unicate.dagger2showcase.models.CharC;
 import eu.unicate.dagger2showcase.models.CharD;
 import eu.unicate.dagger2showcase.models.CharE;
-import eu.unicate.dagger2showcase.models.CharF;
 import eu.unicate.dagger2showcase.models.CharG;
-import eu.unicate.dagger2showcase.models.CharH;
-import eu.unicate.dagger2showcase.models.CharI;
 import eu.unicate.dagger2showcase.models.CharJ;
 import eu.unicate.dagger2showcase.models.CharK;
 import eu.unicate.dagger2showcase.models.CharL;
@@ -27,26 +23,27 @@ import eu.unicate.dagger2showcase.models.CharR;
 
 public class MainActivity extends AppCompatActivity {
 
+	@Inject
+	CharD d;
+	@Inject
+	CharA a;
+	@Inject
+	CharG g;
+	@Inject
+	CharE e;
+	@Inject
+	CharJ j;
+
 	private TextView text;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		text = (TextView)findViewById(R.id.text);
+		text = (TextView) findViewById(R.id.text);
 
-		CharA a = new CharA();
-		CharB b = new CharB(a);
-		CharC c = new CharC(b);
-		CharD d = new CharD(c);
-		CharE e = new CharE(d);
-		CharF f = new CharF(e);
-		CharG g1 = new CharG(f);
-		CharG g2 = new CharG(f);
+		((DaggerShowCaseApplication) getApplication()).getApplicationComponent().inject(this);
 
-		CharH h = new CharH(g1);
-		CharI i = new CharI(h);
-		CharJ j = new CharJ(i);
 
 		// additional activity dependency
 		CharK k = new CharK(this, j);
@@ -58,12 +55,12 @@ public class MainActivity extends AppCompatActivity {
 		CharQ q = new CharQ(this, p);
 		CharR r = new CharR(q);
 
-		print(d, a, g1, g2, e, r);
+		print(d, a, g, g, e, r);
 
 	}
 
 	private void print(CharD d, CharA a, CharG g1, CharG g2, CharE e, CharR r) {
-		text.setText(String.format("%s%s%s%s%s%s2 rox",d, a, g1, g2, e, r));
+		text.setText(String.format("%s%s%s%s%s%s2 rox", d, a, g1, g2, e, r));
 	}
 
 

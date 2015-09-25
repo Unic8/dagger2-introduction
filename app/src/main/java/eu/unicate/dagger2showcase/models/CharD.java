@@ -4,6 +4,7 @@ import android.util.Log;
 
 public class CharD {
 	private final CharC ch;
+
 	public CharD(CharC ch) {
 		this.ch = ch;
 		String name = this.getClass().getSimpleName();
