@@ -1,15 +1,15 @@
 package eu.unicate.dagger2showcase.models;
 
-import android.app.Activity;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 public class CharO {
 	private final CharN ch;
-	private final Activity activity;
+	private final SharedPreferences preferences;
 
-	public CharO(Activity activity, CharN ch) {
+	public CharO(SharedPreferences preferences, CharN ch) {
 		this.ch = ch;
-		this.activity = activity;
+		this.preferences = preferences;
 		String name = this.getClass().getSimpleName();
 		Log.d(name, String.format("Constructor of: %s", name));
 	}
