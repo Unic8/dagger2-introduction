@@ -3,6 +3,7 @@ package eu.unicate.dagger2showcase.di.modules;
 import android.app.Activity;
 import android.content.SharedPreferences;
 
+import dagger.Lazy;
 import dagger.Module;
 import dagger.Provides;
 import eu.unicate.dagger2showcase.di.ActivityScope;
@@ -51,8 +52,8 @@ public class CharK2RModule {
 	 */
 	@Provides
 	@ActivityScope
-	CharO provideO(SharedPreferences preferences, CharN n) {
-		return new CharO(preferences, n);
+	CharO provideO(Lazy<SharedPreferences> preferences, CharN n) {
+		return new CharO(preferences.get(), n);
 	}
 	@Provides
 	@ActivityScope
