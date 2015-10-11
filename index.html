@@ -50,12 +50,99 @@ URL: https://code.google.com/p/io-2012-slides
             <h2 class="white">What is Dependency Injection?</h2>
         </hgroup>
     </slide>
+    <slide>
+        <hgroup>
+            <h2>Example for this talk:</h2>
+        </hgroup>
+        <article class="smaller">
+            <ul class="build">
+                <li><pre class="prettyprint" data-lang="java">
+public class MainActivity extends AppCompatActivity {
+    ...
+    private void print(CharD d, CharA a, CharG g, CharE e, CharR r) {
+        text.setText(String.format("%s%s%s%s%s%s2", d, a, g, g, e, r));
+    }
+    ...
+}
+                </pre></li>
+                <li><pre class="prettyprint" data-lang="java">
+public class CharD {
+    ...
+    @Override
+    public String toString() {
+        return "D";
+    }
+}
+                </pre>
+            </li>
+            </ul>
+        </article>
+    </slide>
+    <slide>
+        <hgroup>
+            <h2>Simple Dependencies...</h2>
+        </hgroup>
+        <article class="smaller">
+            <ul class="build">
+                <li><pre class="prettyprint" data-lang="java">
+public class CharA {
+    public CharA() {
+        Log.d("CharA", "Constructor of: CharA");
+    }
+    ...
+}
+                </pre></li>
+                <li><pre class="prettyprint" data-lang="java">
+public class CharB {
+    private final CharA ch;
+    public CharB(CharA ch) {
+        this.ch = ch;
+        Log.d("CharB", "Constructor of: CharB");
+    }
+    ...
+}
+                </pre></li>
+                <li>... and so on. Up to R</li>
+            </ul>
+        </article>
+    </slide>
+    <slide>
+        <hgroup>
+            <h2>...add a bit of complexity!</h2>
+        </hgroup>
+        <article class="smaller">
+            <ul class="build">
+                <li><pre class="prettyprint" data-lang="java">
+public class CharK {
+    private final CharJ ch;
+    private final Activity activity;
+    public CharK(Activity activity, CharJ ch) {
+        this.ch = ch;
+        this.activity = activity;
+        Log.d("CharK", "Constructor of: CharK");
+    }
+    ....
+                </pre></li>
+                <li><pre class="prettyprint" data-lang="java">
+public class CharO {
+    private final CharN ch;
+    private final SharedPreferences preferences;
+    public CharO(SharedPreferences preferences, CharN ch) {
+        this.ch = ch;
+        this.preferences = preferences;
+        Log.d("CharO", "Constructor of: CharO");
+    }
+    ...
+                </pre></li>
+            </ul>
+        </article>
+    </slide>
 
     <slide>
         <hgroup>
             <h2>Dependency Graph</h2>
 
-            <h3>Not difficult, but already complex</h3>
+            <h3>Not difficult, but complex already</h3>
         </hgroup>
         <article class="flexbox vcenter">
             <span><img src="images/dagger2/di-graph-full.png"></span>
@@ -65,7 +152,7 @@ URL: https://code.google.com/p/io-2012-slides
         <hgroup>
             <h2>Dependency Graph</h2>
 
-            <h3>Not difficult, but already complex</h3>
+            <h3>Not difficult, but complex already</h3>
         </hgroup>
         <article class="flexbox vcenter">
             <span><img src="images/dagger2/di-graph-simplified.png"></span>
@@ -78,15 +165,15 @@ URL: https://code.google.com/p/io-2012-slides
             <h3>without Dependency Injection</h3>
         </hgroup>
         <article class="smaller">
-            <p>Github Tag: no-di</p>
+            <p>Github Tag: <a href="https://github.com/andretietz/dagger2-introduction/blob/no-di/app/src/main/java/eu/unicate/dagger2showcase/MainActivity.java">no-di</a></p>
       <pre class="prettyprint" data-lang="java">
-CharA a = new CharA();
+<b>CharA a = new CharA();</b>
 CharB b = new CharB(a);
 CharC c = new CharC(b);
-CharD d = new CharD(c);
-CharE e = new CharE(d);
+<b>CharD d = new CharD(c);
+CharE e = new CharE(d);</b>
 CharF f = new CharF(e);
-CharG g = new CharG(f);
+<b>CharG g = new CharG(f);</b>
 CharH h = new CharH(g);
 CharI i = new CharI(h);
 CharJ j = new CharJ(i);
@@ -97,11 +184,22 @@ CharN n = new CharN(m);
 CharO o = new CharO(PreferenceManager.getDefaultSharedPreferences(activity), n);
 CharP p = new CharP(o);
 CharQ q = new CharQ(activity, p);
-CharR r = new CharR(q);
-print(d, a, g, g, e, r);
+<b>CharR r = new CharR(q);
+print(d, a, g, g, e, r);</b>
 </pre>
+            <img style="position: absolute; width:400px; left: 600px; top: 100px" src="images/dagger2/meme-wtf.jpg"/>
         </article>
     </slide>
+    <slide>
+        <hgroup>
+            <h2>Dependency Injection</h2>
+            <h3>... using Dagger2</h3>
+        </hgroup>
+        <article class="flexbox vcenter">
+            <span><img src="images/dagger2/use-di.jpg"></span>
+        </article>
+    </slide>
+
     <slide>
         <hgroup>
             <h2>Dagger 2 Basics</h2>
@@ -119,7 +217,6 @@ print(d, a, g, g, e, r);
     <slide>
         <hgroup>
             <h2>Modules</h2>
-
             <h3>Buckets providing Objects</h3>
         </hgroup>
         <article class="flexbox vcenter">
@@ -129,7 +226,6 @@ print(d, a, g, g, e, r);
     <slide>
         <hgroup>
             <h2>Components</h2>
-
             <h3>Expose Objects from Modules</h3>
         </hgroup>
         <article class="flexbox vcenter">
@@ -138,9 +234,29 @@ print(d, a, g, g, e, r);
     </slide>
     <slide>
         <hgroup>
-            <h2>Scopes</h2>
+            <h2>Components</h2>
+            <h3>Expose Objects from Modules</h3>
+        </hgroup>
+        <article class="flexbox vcenter">
+            <span><img src="images/dagger2/modules-components-relation.png"></span>
+        </article>
+    </slide>
+    <slide>
+        <hgroup>
+            <h2>Components</h2>
+            <h3>Expose Objects from Modules</h3>
+        </hgroup>
+        <article class="flexbox vcenter">
+            <span><img src="images/dagger2/modules-components-relation2.png"></span>
+        </article>
+    </slide>
 
-            <h3>Component Lifecycle Dependent</h3>
+
+    <slide>
+        <hgroup>
+            <h2>Scoping</h2>
+
+            <h3>Lifecycle Dependency</h3>
         </hgroup>
         <article class="flexbox vcenter">
             <span><img src="images/dagger2/di-graph-full.png"></span>
@@ -148,7 +264,7 @@ print(d, a, g, g, e, r);
     </slide>
     <slide>
         <hgroup>
-            <h2>Scopes</h2>
+            <h2>Scoping</h2>
 
             <h3>Can we do that better?</h3>
         </hgroup>
@@ -158,9 +274,9 @@ print(d, a, g, g, e, r);
     </slide>
     <slide>
         <hgroup>
-            <h2>Scopes</h2>
+            <h2>Scoping</h2>
 
-            <h3>Now SharedPreferences can life as long as the Application is alive.</h3>
+            <h3>Now SharedPreferences can live as long as the Application is alive.</h3>
         </hgroup>
         <article class="flexbox vcenter">
             <span><img src="images/dagger2/di-graph-optimization02.png"></span>
@@ -168,7 +284,7 @@ print(d, a, g, g, e, r);
     </slide>
     <slide>
         <hgroup>
-            <h2>Scopes</h2>
+            <h2>Scoping</h2>
 
             <h3>Now we can classify even better!</h3>
         </hgroup>
@@ -176,12 +292,22 @@ print(d, a, g, g, e, r);
             <span><img src="images/dagger2/di-graph-optimization03.png"></span>
         </article>
     </slide>
+    <slide>
+        <hgroup>
+            <h2>Scoping</h2>
+
+            <h3>Now we can classify even better!</h3>
+        </hgroup>
+        <article class="flexbox vcenter">
+            <span><img src="images/dagger2/hands-on.jpg"></span>
+        </article>
+    </slide>
 
     <slide>
         <hgroup>
             <h2>Hands on!</h2>
 
-            <h3>What do we need for that?</h3>
+            <h3>What do we need to use Dagger2?</h3>
         </hgroup>
         <article class="smaller">
             <pre class="prettyprint" data-lang="groovy">
@@ -214,9 +340,9 @@ apply plugin: 'com.android.application'
 dependencies {
     ...
     // dagger 2
-    <b>apt 'com.google.dagger:dagger-compiler:2.0.1'
-        compile 'com.google.dagger:dagger:2.0.1'
-        provided 'org.glassfish:javax.annotation:10.0-b28'</b>
+    <b>apt 'com.google.dagger:dagger-compiler:2.0.1' // code generation
+    compile 'com.google.dagger:dagger:2.0.1' // dagger2 basics
+    provided 'org.glassfish:javax.annotation:10.0-b28' // annotations</b>
     ...
                 </pre>
                 </li>
@@ -275,23 +401,22 @@ public @interface ActivityScope {}
                             <pre class="prettyprint" data-lang="java">
 @Module
 public class ApplicationModule {
-	private final Context context;
-	public ApplicationModule(Context context) {
-		this.context = context;
-	}
+    private final Context context;
+    public ApplicationModule(Context context) {
+        this.context = context;
+    }
 
-	@Singleton
-	@Provides
-	Context provideContext() {
-		return context;
-	}
+    @Singleton
+    <b>@Provides
+    Context provideContext()</b> {
+        return context;
+    }
 
-	@Singleton
-	@Provides
-	SharedPreferences providePreferences(Context context) {
-		Log.i(ApplicationModule.class.getSimpleName(), "Get SharedPreferences");
-		return PreferenceManager.getDefaultSharedPreferences(context);
-	}
+    @Singleton
+    @Provides
+    SharedPreferences providePreferences(<b>Context context</b>) {
+        return PreferenceManager.getDefaultSharedPreferences(context);
+    }
 }
                 </pre>
         </article>
@@ -306,23 +431,23 @@ public class ApplicationModule {
                             <pre class="prettyprint" data-lang="java">
 @Module
 public class CharA2JModule {
-	@Provides
-	@Singleton
-	CharA provideA() {
-		return new CharA();
-	}
+    @Singleton
+    <b>@Provides
+    CharA</b> provideA() {
+        return new CharA();
+    }
 
-	@Provides
-	@Singleton
-	CharB provideB(CharA a) {
-		return new CharB(a);
-	}
-	...
-	@Provides
-	@Singleton
-	CharJ provideJ(CharI i) {
-		return new CharJ(i);
-	}
+    @Singleton
+    @Provides
+    CharB provideB(<b>CharA a</b>) {
+        return new CharB(a);
+    }
+    ...
+    @Singleton
+    @Provides
+    CharJ provideJ(CharI i) {
+        return new CharJ(i);
+    }
 }
                 </pre>
         </article>
@@ -330,24 +455,23 @@ public class CharA2JModule {
     <slide>
         <hgroup>
             <h2>Creating Modules</h2>
-
             <h3>The Activity Module</h3>
         </hgroup>
         <article class="smaller">
                             <pre class="prettyprint" data-lang="java">
 @Module
 public class ActivityModule {
-	private final Activity activity;
+    private final Activity activity;
 
-	public ActivityModule(Activity activity) {
-		this.activity = activity;
-	}
+    public ActivityModule(Activity activity) {
+        this.activity = activity;
+    }
 
-	@Provides
-	@ActivityScope
-	Activity provideActivity() {
-		return activity;
-	}
+    @Provides
+    @ActivityScope
+    Activity provideActivity() {
+        return activity;
+    }
 }
                 </pre>
         </article>
@@ -363,25 +487,17 @@ public class ActivityModule {
                             <pre class="prettyprint" data-lang="java">
 @Module
 public class CharK2RModule {
-	/*
-	 * CharJ from ApplicationComponent
-	 * Activity from ActivityModule
-     * same for CharM and CharQ
-	 */
-	@Provides
-	@ActivityScope
-	<b>CharK provideK(Activity activity, CharJ j) {</b>
-		return new CharK(activity, j);
-	}
+    @Provides
+    @ActivityScope
+    <b>CharK provideK(Activity activity, CharJ j) {</b>
+        return new CharK(activity, j);
+    }
     ...
-	/*
-	 * SharedPreferences from ApplicationComponent
-	 */
-	@Provides
-	@ActivityScope
-	<b>CharO provideO(SharedPreferences preferences, CharN n) {</b>
-		return new CharO(preferences, n);
-	}
+    @Provides
+    @ActivityScope
+    <b>CharO provideO(SharedPreferences preferences, CharN n) {</b>
+        return new CharO(preferences, n);
+    }
     ...
 }
                 </pre>
@@ -394,7 +510,7 @@ public class CharK2RModule {
 
             <h3>The ApplicationComponent</h3>
         </hgroup>
-        <article class="smaller">
+        <article>
                             <pre class="prettyprint" data-lang="java">
 @Singleton
 @Component(modules = {CharA2JModule.class, ApplicationModule.class})
@@ -404,30 +520,36 @@ public interface ApplicationComponent {
 	CharG getG();
 	CharE getE();
 
-	CharJ getJ(); // used in K2R-Module to create CharK
+	<b>CharJ getJ();</b>
 	SharedPreferences getPreferences();
 }
                 </pre>
         </article>
     </slide>
+    <slide>
+        <hgroup>
+            <h2>Why CharJ?</h2>
 
+            <h3>CharJ is a Dependency of CharK!</h3>
+        </hgroup>
+        <article class="flexbox vcenter">
+            <span><img src="images/dagger2/di-graph-optimization03.png"></span>
+        </article>
+    </slide>
     <slide>
         <hgroup>
             <h2>Creating Components</h2>
 
             <h3>The ActivityComponent</h3>
         </hgroup>
-        <article class="smaller">
+        <article>
                             <pre class="prettyprint" data-lang="java">
 @ActivityScope
 @Component(
-    // the ActivityModule is sharing the Activity with the CharK2RModule
-    modules = {ActivityModule.class, CharK2RModule.class},
-    // multiple dependencies also possible
-    dependencies = {ApplicationComponent.class}
+    modules = {<b>ActivityModule.class</b>, CharK2RModule.class},
+    dependencies = {<b>ApplicationComponent.class</b>}
 )
 public interface ActivityComponent {
-	// define what we are able to inject into
 	void inject(MainActivity activity);
 	CharR getR();
 }
@@ -463,11 +585,11 @@ public interface ActivityComponent {
         <article class="smaller">
 <pre class="prettyprint" data-lang="java">
 public class DaggerShowCaseApplication extends Application {
-	private ApplicationComponent component;
+	private <b>ApplicationComponent</b> component;
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		component = DaggerApplicationComponent.builder()
+		component = Dagger<b>ApplicationComponent</b>.builder()
 				.applicationModule(new ApplicationModule(this))
 				.build();
 	}
@@ -491,11 +613,14 @@ public class DaggerShowCaseApplication extends Application {
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-    ActivityComponent component = DaggerActivityComponent.builder()
-            .applicationComponent(((DaggerShowCaseApplication) getApplication()).getApplicationComponent())
-            .activityModule(new ActivityModule(this)).build();
-    component.inject(this);
-    // here you can use your injected members already
+    DaggerActivityComponent.builder()
+        .applicationComponent(
+            ((DaggerShowCaseApplication) getApplication()).getApplicationComponent()
+        )
+        .activityModule(new ActivityModule(this))
+        .build() // returns an ActivityComponent
+            .inject(this);
+    // start using your injected members
 }
 </pre>
         </article>
@@ -507,7 +632,6 @@ protected void onCreate(Bundle savedInstanceState) {
             <h3>without Dependency Injection</h3>
         </hgroup>
         <article class="smaller">
-            <p>I left out the onCreate stuff, that everything fits on the slide</p>
       <pre class="prettyprint" data-lang="java">
 CharA a = new CharA();
 CharB b = new CharB(a);
@@ -564,8 +688,7 @@ protected void onCreate(Bundle savedInstanceState) {
         </hgroup>
         <article class="smaller">
             <ul class="build">
-                <li><p>Lazy is creating the object only if needed and only ones (even if you have no
-                    scope setup)</p>
+                <li><p>Lazy is creating the object only if needed and only ones (per scope)</p>
 
                 <pre class="prettyprint" data-lang="java">
 // Before: @Inject CharD d;
@@ -581,9 +704,107 @@ protected void onCreate(Bundle savedInstanceState) {
 @Inject Provider&lt;CharD&gt; d;
                 </pre>
                 </li>
-                <li>Both Options can be used inside Modules also!</li>
+                <li>Both Options can be used inside Modules also!<br />Tag: <a href="https://github.com/andretietz/dagger2-introduction/blob/lazy-inside-module/app/src/main/java/eu/unicate/dagger2showcase/di/modules/CharK2RModule.java#L55">lazy-inside-module</a> </li>
             </ul>
 
+        </article>
+    </slide>
+    <slide>
+        <hgroup>
+            <h2>Additional Goodies</h2>
+            <h3>Qualifiers</h3>
+        </hgroup>
+        <article class="smaller">
+            <p>What if a module has to return 2 different objects of the same class?<br />Let's say 2 different G's in the Word "Dagger".</p>
+            <ul class="build">
+                <li>Create a Qualifier.<pre class="prettyprint" data-lang="java">
+@Qualifier
+@Retention(RUNTIME)
+public @interface GType {
+	String value() default "";
+}
+                </pre></li>
+            </ul>
+        </article>
+    </slide>
+    <slide>
+        <hgroup>
+            <h2>Additional Goodies</h2>
+            <h3>Qualifiers</h3>
+        </hgroup>
+        <article class="smaller">
+            <p>What if a module has to return 2 different objects of the same class?<br />Let's say 2 different G's in the Word "Dagger".</p>
+            <ul>
+                <li>Create a Qualifier.</li>
+                <li>Use Qualifier in Module</li>
+                <li><pre class="prettyprint" data-lang="java">
+@Provides
+@Singleton
+@GType("1")
+CharG provideG1(CharF f) {
+    return new CharG(f, 1);
+}
+
+@Provides
+@Singleton
+@GType("2")
+CharG provideG2(CharF f) {
+    return new CharG(f, 2);
+}
+                </pre>
+                </li>
+            </ul>
+        </article>
+    </slide>
+    <slide>
+        <hgroup>
+            <h2>Additional Goodies</h2>
+            <h3>Qualifiers</h3>
+        </hgroup>
+        <article class="smaller">
+            <p>What if a module has to return 2 different objects of the same class?<br />Let's say 2 different G's in the Word "Dagger".</p>
+            <ul>
+                <li>Create a Qualifier.</li>
+                <li>Use Qualifier in Module</li>
+                <li>Expose all you want in your Component</li>
+                <li><pre class="prettyprint" data-lang="java">
+public interface ApplicationComponent {
+    ...
+    @GType("1")
+    CharG getG1();
+    @GType("2")
+    CharG getG2();
+    ...
+</pre>
+                </li>
+            </ul>
+        </article>
+    </slide>
+        <slide>
+        <hgroup>
+            <h2>Additional Goodies</h2>
+            <h3>Qualifiers</h3>
+        </hgroup>
+        <article class="smaller">
+            <p>What if a module has to return 2 different objects of the same class?<br />Let's say 2 different G's in the Word "Dagger".</p>
+            <ul>
+                <li>Create a Qualifier.</li>
+                <li>Use Qualifier in Module</li>
+                <li>Expose all you want in your Component</li>
+                <li>Inject using the qualifier</li>
+                <li><pre class="prettyprint" data-lang="java">
+public class MainActivity extends AppCompatActivity {
+    ...
+    @Inject
+    @GType("1")
+    CharG g1;
+    @Inject
+    @GType("2")
+    CharG g2;
+    ...
+</pre>
+                </li>
+            </ul>
         </article>
     </slide>
 
@@ -591,7 +812,9 @@ protected void onCreate(Bundle savedInstanceState) {
     <slide class="thank-you-slide nobackground">
         <aside class="gdbar right"><img src="images/gdg-hamburg-android/small.png"></aside>
         <article class="flexbox vcenter auto-fadein">
-            <img  style="position: absolute; width:300px; left: 60px; top: 150px" src="images/dagger2/dagger2-intro-github.png"/>
+            <img style="position: absolute; width:300px; left: 60px; top: 150px"
+                 src="images/dagger2/dagger2-intro-github.png"/>
+
             <h2>Thank You!</h2>
 
         </article>

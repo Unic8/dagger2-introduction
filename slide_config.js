@@ -25,7 +25,7 @@ var SLIDE_CONFIG = {
     name: 'Andre Tietz',
     company: 'Android Developer @ mytaxi',
     twitter: '@antietz',
-    github: 'https://github.com/Unic8/dagger2-introduction'
+    github: 'https://github.com/andretietz/dagger2-introduction'
   }/*, {
     name: 'Second Name',
     company: 'Job Title, Google',
