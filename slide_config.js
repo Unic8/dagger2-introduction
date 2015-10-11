@@ -22,7 +22,7 @@ var SLIDE_CONFIG = {
 
   // Author information
   presenters: [{
-    name: 'Andre Tietz',
+    name: 'Andr&eacute; Tietz',
     company: 'Android Developer @ mytaxi',
     twitter: '@antietz',
     github: 'https://github.com/andretietz/dagger2-introduction'
