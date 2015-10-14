@@ -94,8 +94,8 @@ public class CharA {
                 </pre></li>
                 <li><pre class="prettyprint" data-lang="java">
 public class CharB {
-    private final CharA ch;
-    public CharB(CharA ch) {
+    <b>private final CharA ch;</b>
+    public CharB(<b>CharA ch</b>) {
         this.ch = ch;
         Log.d("CharB", "Constructor of: CharB");
     }
@@ -586,17 +586,18 @@ public interface ActivityComponent {
         <article class="smaller">
 <pre class="prettyprint" data-lang="java">
 public class DaggerShowCaseApplication extends Application {
-	private <b>ApplicationComponent</b> component;
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		component = Dagger<b>ApplicationComponent</b>.builder()
-				.applicationModule(new ApplicationModule(this))
-				.build();
-	}
-	public ApplicationComponent getApplicationComponent() {
-		return component;
-	}
+    private <b>ApplicationComponent</b> component;
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        component = Dagger<b>ApplicationComponent</b>.builder()
+            .applicationModule(new ApplicationModule(this))
+            //.charA2JModule(new CharA2JModule())
+            .build();
+    }
+    public ApplicationComponent getApplicationComponent() {
+        return component;
+    }
 }
 </pre>
         </article>
@@ -619,6 +620,7 @@ protected void onCreate(Bundle savedInstanceState) {
             ((DaggerShowCaseApplication) getApplication()).getApplicationComponent()
         )
         .activityModule(new ActivityModule(this))
+        //.charK2RModule(new CharK2RModule())
         .build() // returns an ActivityComponent
             .inject(this);
     // start using your injected members
@@ -634,13 +636,13 @@ protected void onCreate(Bundle savedInstanceState) {
         </hgroup>
         <article class="smaller">
       <pre class="prettyprint" data-lang="java">
-CharA a = new CharA();
+<b>CharA a = new CharA();</b>
 CharB b = new CharB(a);
 CharC c = new CharC(b);
-CharD d = new CharD(c);
-CharE e = new CharE(d);
+<b>CharD d = new CharD(c);
+CharE e = new CharE(d);</b>
 CharF f = new CharF(e);
-CharG g = new CharG(f);
+<b>CharG g = new CharG(f);</b>
 CharH h = new CharH(g);
 CharI i = new CharI(h);
 CharJ j = new CharJ(i);
@@ -651,8 +653,8 @@ CharN n = new CharN(m);
 CharO o = new CharO(PreferenceManager.getDefaultSharedPreferences(activity), n);
 CharP p = new CharP(o);
 CharQ q = new CharQ(activity, p);
-CharR r = new CharR(q);
-print(d, a, g, g, e, r);
+<b>CharR r = new CharR(q);
+print(d, a, g, g, e, r);</b>
 </pre>
         </article>
     </slide>
@@ -664,20 +666,21 @@ print(d, a, g, g, e, r);
         </hgroup>
         <article class="smaller">
                     <pre class="prettyprint" data-lang="java">
-@Inject CharD d;
+<b>@Inject CharD d;
 @Inject CharA a;
 @Inject CharG g;
 @Inject CharE e;
-@Inject CharR r;
+@Inject CharR r;</b>
 @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    // This can be even shorter!
     ActivityComponent component = DaggerActivityComponent.builder()
             .applicationComponent(((DaggerShowCaseApplication) getApplication()).getApplicationComponent())
             .activityModule(new ActivityModule(this)).build();
     component.inject(this);
-    print(d, a, g, g, e, r);
+    <b>print(d, a, g, g, e, r);</b>
                 </pre>
         </article>
     </slide>
@@ -824,7 +827,22 @@ Tag: <a href="https://github.com/andretietz/dagger2-introduction/blob/qualifiers
             <!-- populated from slide_config.json -->
         </p>
     </slide>
-
+    <slide>
+        <hgroup>
+            <h2>Dagger2 Library Information</h2>
+        </hgroup>
+        <article >
+            <p>What if a module has to return 2 different objects of the same class?<br />Let's say 2 different G's in the Word "Dagger".</p>
+            <ul>
+                <li>8 Classes</li>
+                <li>6 Annotations</li>
+                <li>3 Interfaces</li>
+                <li>Size: 18 KB</li>
+                <li>Method Count: 94</li>
+                <li><b class="color: red">+ generated Code</b></li>
+            </ul>
+        </article>
+    </slide>
     <slide class="backdrop"></slide>
 
 </slides>
